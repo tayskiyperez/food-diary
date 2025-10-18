@@ -1,9 +1,3 @@
 {
-  "functions": {
-    "api/**/*": {
-      "runtime": "nodejs18.x",
-      "memory": 128,
-      "maxDuration": 10
-    }
-  }
+  "version": 2
 }
