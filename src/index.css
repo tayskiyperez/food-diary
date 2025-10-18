@@ -1,0 +1,3 @@
+/* минимальный безопасный CSS — без @tailwind и без @import "tailwindcss" */
+html, body, #root { height: 100%; }
+body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
