@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { getAuth, signInWithCustomToken, updatePassword } from "firebase/auth";
 
-const API_BASE = "https://europe-west1-food-diary-4d86c.cloudfunctions.net/api"; // замени на свой URL
+const API_BASE = "https://europe-west1-food-diary-4d86c.cloudfunctions.net/api"; // Р·Р°РјРµРЅРё РЅР° СЃРІРѕР№ URL
 
 export default function EmailOtpPage({ purpose = "signup" }) {
     const auth = getAuth();
@@ -24,11 +24,11 @@ export default function EmailOtpPage({ purpose = "signup" }) {
                 body: JSON.stringify({ email, purpose })
             });
             const data = await r.json();
-            if (!r.ok) throw new Error(data?.error || "Ошибка отправки кода");
+            if (!r.ok) throw new Error(data?.error || "РћС€РёР±РєР° РѕС‚РїСЂР°РІРєРё РєРѕРґР°");
             setStep("code");
             setTimeout(() => inputsRef.current[0]?.focus(), 50);
         } catch (e) {
-            setErr(e.message || "Ошибка");
+            setErr(e.message || "РћС€РёР±РєР°");
         } finally {
             setLoading(false);
         }
@@ -43,11 +43,11 @@ export default function EmailOtpPage({ purpose = "signup" }) {
                 body: JSON.stringify({ email, code: codeValue })
             });
             const data = await r.json();
-            if (!r.ok) throw new Error(data?.error || "Неверный код");
+            if (!r.ok) throw new Error(data?.error || "РќРµРІРµСЂРЅС‹Р№ РєРѕРґ");
             await signInWithCustomToken(auth, data.token);
             setStep(purpose === "reset" ? "setpass" : "done");
         } catch (e) {
-            setErr(e.message || "Ошибка");
+            setErr(e.message || "РћС€РёР±РєР°");
         } finally {
             setLoading(false);
         }
@@ -56,14 +56,14 @@ export default function EmailOtpPage({ purpose = "signup" }) {
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md bg-white rounded-2xl shadow p-6">
-                <h1 className="text-2xl font-bold mb-2">Подтверждение email</h1>
+                <h1 className="text-2xl font-bold mb-2">РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ email</h1>
                 <p className="text-gray-600 mb-4">
                     {step === "email" && (purpose === "signup"
-                        ? "Введите email, мы отправим 6-значный код."
-                        : "Введите email для сброса пароля.")}
-                    {step === "code" && `Мы отправили код на ${email}`}
-                    {step === "setpass" && "Придумайте новый пароль"}
-                    {step === "done" && "Готово!"}
+                        ? "Р’РІРµРґРёС‚Рµ email, РјС‹ РѕС‚РїСЂР°РІРёРј 6-Р·РЅР°С‡РЅС‹Р№ РєРѕРґ."
+                        : "Р’РІРµРґРёС‚Рµ email РґР»СЏ СЃР±СЂРѕСЃР° РїР°СЂРѕР»СЏ.")}
+                    {step === "code" && `РњС‹ РѕС‚РїСЂР°РІРёР»Рё РєРѕРґ РЅР° ${email}`}
+                    {step === "setpass" && "РџСЂРёРґСѓРјР°Р№С‚Рµ РЅРѕРІС‹Р№ РїР°СЂРѕР»СЊ"}
+                    {step === "done" && "Р“РѕС‚РѕРІРѕ!"}
                 </p>
 
                 {err && <div className="mb-3 p-3 rounded bg-rose-50 text-rose-700">{err}</div>}
@@ -82,7 +82,7 @@ export default function EmailOtpPage({ purpose = "signup" }) {
                             disabled={loading || !email}
                             className="mt-3 w-full rounded-xl px-4 py-3 bg-black text-white disabled:opacity-50"
                         >
-                            {loading ? "Отправляем…" : "Отправить код"}
+                            {loading ? "РћС‚РїСЂР°РІР»СЏРµРјвЂ¦" : "РћС‚РїСЂР°РІРёС‚СЊ РєРѕРґ"}
                         </button>
                     </>
                 )}
@@ -118,7 +118,7 @@ export default function EmailOtpPage({ purpose = "signup" }) {
                             disabled={loading || codeValue.length !== 6}
                             className="w-full rounded-xl px-4 py-3 bg-black text-white disabled:opacity-50"
                         >
-                            {loading ? "Проверяем…" : "Подтвердить"}
+                            {loading ? "РџСЂРѕРІРµСЂСЏРµРјвЂ¦" : "РџРѕРґС‚РІРµСЂРґРёС‚СЊ"}
                         </button>
                     </>
                 )}
@@ -128,7 +128,7 @@ export default function EmailOtpPage({ purpose = "signup" }) {
                         <input
                             type="password"
                             className="w-full border rounded-xl px-4 py-3"
-                            placeholder="Новый пароль (мин. 6)"
+                            placeholder="РќРѕРІС‹Р№ РїР°СЂРѕР»СЊ"
                             value={newPass}
                             onChange={(e) => setNewPass(e.target.value)}
                         />
@@ -138,23 +138,24 @@ export default function EmailOtpPage({ purpose = "signup" }) {
                                     await updatePassword(getAuth().currentUser, newPass);
                                     setStep("done");
                                 } catch (e) {
-                                    setErr(e.message || "Ошибка смены пароля");
+                                    setErr(e.message || "РћС€РёР±РєР° СЃРјРµРЅС‹ РїР°СЂРѕР»СЏ");
                                 }
                             }}
                             disabled={loading || newPass.length < 6}
                             className="mt-3 w-full rounded-xl px-4 py-3 bg-black text-white disabled:opacity-50"
                         >
-                            Сохранить пароль
+                            РЎРѕС…СЂР°РЅРёС‚СЊ РїР°СЂРѕР»СЊ
                         </button>
                     </>
                 )}
 
                 {step === "done" && (
                     <a href="/start" className="inline-block mt-2 w-full text-center rounded-xl px-4 py-3 bg-black text-white">
-                        Перейти в приложение
+                        РџРµСЂРµР№С‚Рё РІ РїСЂРёР»РѕР¶РµРЅРёРµ
                     </a>
                 )}
             </div>
         </div>
     );
 }
+

@@ -1,3 +1,447 @@
-/* минимальный безопасный CSS — без @tailwind и без @import "tailwindcss" */
-html, body, #root { height: 100%; }
-body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+
+:root {
+    --inset-bottom: env(safe-area-inset-bottom);
+    --inset-right: env(safe-area-inset-right);
+   
+    --fd-accent: #3b82f6;
+    --fd-radius: 16px;
+    --fd-card-radius: 20px;
+    --fd-shadow-sm: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px -12px rgba(0,0,0,.12);
+    --fd-shadow-lg: 0 12px 30px rgba(0,0,0,.12);
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+}
+
+
+
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button, [role="button"] {
+    touch-action: manipulation;
+}
+
+    button:focus-visible, [role="button"]:focus-visible, input:focus-visible, select:focus-visible {
+        outline: 2px solid color-mix(in oklab, var(--fd-accent) 45%, white);
+        outline-offset: 2px;
+        border-radius: 12px;
+    }
+
+
+.hover-soft:hover {
+    filter: brightness(1.02);
+}
+
+
+.fd-tap:active {
+    transform: scale(.96);
+}
+
+
+.fd-tap, [data-ripple] {
+    position: relative;
+    overflow: hidden;
+}
+
+.fd-ripple {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    transform: scale(0);
+    opacity: .35;
+    background: currentColor;
+    animation: fd-ripple .6s ease-out forwards;
+    mix-blend-mode: multiply;
+}
+
+@keyframes fd-ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+
+.app-card .rounded-2xl {
+    border-radius: var(--fd-card-radius);
+}
+
+.fd-card {
+    box-shadow: var(--fd-shadow-sm);
+}
+
+
+
+
+@keyframes swipeLeft {
+    from {
+        transform: translateX(20px);
+        opacity: .95
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1
+    }
+}
+
+@keyframes swipeRight {
+    from {
+        transform: translateX(-20px);
+        opacity: .95
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1
+    }
+}
+
+.animate-swipe-left {
+    animation: swipeLeft .30s ease;
+}
+
+.animate-swipe-right {
+    animation: swipeRight .30s ease;
+}
+
+
+
+
+:root {
+    --sa-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.app-shell {
+    min-height: 100dvh;
+}
+
+.tabbar-fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: max(0px, var(--sa-bottom));
+    z-index: 50;
+}
+
+.tabbar-inner {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 12px;
+    padding-bottom: 12px;
+}
+
+.content-with-tabbar {
+    padding-bottom: calc(96px + var(--sa-bottom));
+}
+
+
+.tabbar-fixed .rounded-2xl {
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,.7);
+    border: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 20px 50px rgba(0,0,0,.08);
+}
+
+
+.tabbar-fixed .grid > button[aria-current="page"] span::after,
+.tabbar-fixed .grid > button.active span::after {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 3px;
+    margin: 2px auto 0;
+    border-radius: 9999px;
+    background: var(--fd-accent);
+}
+
+
+
+
+.expand-panel {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: max-height 500ms cubic-bezier(.22,.61,.36,1), opacity 280ms ease, transform 280ms ease;
+    will-change: max-height, opacity, transform;
+}
+
+    .expand-panel.open {
+        max-height: 320px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+
+
+@keyframes fd-fade-in {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fd-scale-in {
+    from {
+        transform: scale(.96);
+        opacity: 0
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1
+    }
+}
+
+@keyframes fd-slide-up {
+    from {
+        transform: translateY(16px);
+        opacity: 0
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1
+    }
+}
+
+.fd-fade-in {
+    animation: fd-fade-in .18s ease-out both;
+}
+
+.fd-scale-in {
+    animation: fd-scale-in .22s ease-out both;
+}
+
+.fd-slide-up {
+    animation: fd-slide-up .26s cubic-bezier(.22,.7,.3,1) both;
+}
+
+
+.fd-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    border-radius: 9999px;
+    transition: background-color .2s;
+}
+
+    .fd-switch .knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: 9999px;
+        background: white;
+        box-shadow: 0 1px 2px rgba(0,0,0,.08);
+        transition: transform .2s ease;
+    }
+
+    .fd-switch.on {
+        background: #10b981;
+    }
+
+    .fd-switch.off {
+        background: #d1d5db;
+    }
+
+    .fd-switch.on .knob {
+        transform: translateX(20px);
+    }
+
+
+.fd-segment {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: .25rem;
+    background: #f3f4f6;
+    border-radius: 14px;
+    padding: 4px;
+}
+
+    .fd-segment button {
+        border-radius: 12px;
+        padding: .5rem .75rem;
+        font-size: .875rem;
+    }
+
+    .fd-segment .active {
+        background: white;
+        box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    }
+
+
+.fd-section-title {
+    font-size: .75rem;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+
+
+
+html.dark {
+    color-scheme: dark;
+    --fd-bg: #0d0d0d;
+    --fd-card: #1e1e1e;
+    --fd-input: #2a2a2a;
+    --fd-text: #f5f5f5;
+    --fd-border: #333;
+}
+
+.dark body {
+    background-color: var(--fd-bg);
+    color: var(--fd-text);
+}
+
+
+.dark .app-card .fd-card,
+.dark .app-card .bg-gray-50,
+.dark .app-card .bg-white:not(.tabbar-surface) {
+    background-color: var(--fd-card) !important;
+    border-color: var(--fd-border) !important;
+}
+
+
+.dark .app-card input,
+.dark .app-card button,
+.dark .app-card .border {
+    background-color: var(--fd-input) !important;
+    border-color: var(--fd-border) !important;
+    color: var(--fd-text) !important;
+}
+
+
+.dark .app-card .tabbar-surface,
+.dark .app-card .tabbar-surface * {
+    background-color: initial !important;
+    color: initial !important;
+    border-color: initial !important;
+}
+
+
+.dark .app-card .text-gray-700,
+.dark .app-card .text-gray-600,
+.dark .app-card .text-gray-500 {
+    color: var(--fd-text) !important;
+}
+
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-white:hover,
+.dark .hover\:bg-gray-100:hover {
+    background-color: #3a3a3a !important;
+}
+
+
+.dark .bg-blue-600,
+.dark .bg-emerald-600,
+.dark .bg-gray-100,
+.dark .bg-blue-50,
+.dark .bg-rose-50 {
+    background-color: var(--fd-input) !important;
+    color: var(--fd-text) !important;
+}
+
+
+.dark .tabbar-fixed .rounded-2xl {
+    background: rgba(20,20,20,.65);
+    border-color: rgba(255,255,255,.06);
+    box-shadow: 0 20px 50px rgba(0,0,0,.5);
+}
+
+
+
+
+
+
+.header-sticky {
+    padding-top: env(safe-area-inset-top);
+}
+
+.footer {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+
+
+
+
+
+
+@media (hover:none) {
+    .touch-manipulation:hover {
+        background: inherit !important;
+    }
+
+    .touch-manipulation:focus {
+        background: inherit !important;
+    }
+}
+
+
+.chip-red {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #b91c1c;
+}
+
+.chip-yellow {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+.chip-green {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+}
+
+
+html, body {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+
+input, textarea {
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
