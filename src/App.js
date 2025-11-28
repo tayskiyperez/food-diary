@@ -115,15 +115,30 @@ export default function App() {
         () => localStorage.getItem("theme_pref") || "system"
     );
 
+    const resolveTheme = (pref) => {
+        if (pref === "dark") return "dark";
+        if (pref === "light") return "light";
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            return "dark";
+        }
+        return "light";
+    };
+
     function applyTheme(next) {
         const root = document.documentElement;
-        if (next === "dark") root.classList.add("dark");
-        else root.classList.remove("dark");
+        const resolved = resolveTheme(next);
+        root.classList.toggle("dark", resolved === "dark");
     }
 
     useEffect(() => {
         localStorage.setItem("theme_pref", theme);
         applyTheme(theme);
+
+        if (theme !== "system") return undefined;
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const listener = () => applyTheme("system");
+        mediaQuery.addEventListener("change", listener);
+        return () => mediaQuery.removeEventListener("change", listener);
     }, [theme]);
 
     
@@ -802,8 +817,8 @@ export default function App() {
 
     if (user && !emailVerified) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+            <div className="min-h-screen app-shell app-card flex items-center justify-center bg-gray-50">
+                <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center app-surface">
                     <h2 className="text-xl font-bold mb-2">
                         Подтвердите email
                     </h2>
@@ -893,7 +908,7 @@ export default function App() {
     };
 
     return (
-        <div className="min-h-screen bg-white relative">
+        <div className="min-h-screen bg-gray-50 relative app-shell app-card">
             <div
                 className={`fixed top-3 inset-x-0 z-50 flex justify-center transition-transform duration-300 ${toastMsg ? "translate-y-0" : "-translate-y-24"
                     }`}
@@ -906,7 +921,7 @@ export default function App() {
             </div>
 
             <div className="mx-auto w-full max-w-[480px] min-h-screen flex flex-col pb-16">
-                <header className="px-5 pt-5 pb-3 border-b sticky top-0 bg-white/95 backdrop-blur z-10">
+                <header className="px-5 pt-5 pb-3 border-b sticky top-0 bg-white/95 backdrop-blur z-10 app-surface">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-xl font-bold">
@@ -1005,7 +1020,7 @@ export default function App() {
                 </main>
             </div>
 
-            <nav className="fixed bottom-0 inset-x-0 h-16 bg-white border-t shadow-[0_-2px_8px_rgba(0,0,0,0.06)] z-40">
+            <nav className="fixed bottom-0 inset-x-0 h-16 bg-white border-t shadow-[0_-2px_8px_rgba(0,0,0,0.06)] z-40 app-surface">
                 <div className="mx-auto w-full max-w-[480px] h-full">
                     <div className="grid grid-cols-5 text-[11px] h-full">
                         <button

@@ -196,9 +196,9 @@ export default function AuthScreen() {
     };
 
     return (
-        <div className="min-h-screen bg-white flex justify-center py-6">
-            <div className="w-full max-w-[420px] min-h-[calc(100vh-3rem)] bg-white flex flex-col">
-                <header className="px-5 pt-5 pb-3 border-b bg-white/95 backdrop-blur">
+        <div className="min-h-screen bg-white flex justify-center py-6 app-shell app-card">
+            <div className="w-full max-w-[420px] min-h-[calc(100vh-3rem)] bg-white flex flex-col app-surface">
+                <header className="px-5 pt-5 pb-3 border-b bg-white/95 backdrop-blur app-surface">
                     <h1 className="text-xl font-bold text-center">Пищевой дневник</h1>
                     <div className="mt-1 text-xs text-gray-500 text-center">
                         Вход и регистрация
